@@ -14,10 +14,14 @@ defmodule Ephemeralist.Accounts do
   end 
 
   def get_user(id) do 
-    Repo.get User, id 
+    case Repo.get(User, id) do 
+      nil -> {:error, :user_not_found}
+
+      user -> {:ok, user}
+    end 
   end 
 
   def get_user!(id) do 
-    Repo.get! User, id
+    {:ok, Repo.get!(User, id)}
   end 
 end 
