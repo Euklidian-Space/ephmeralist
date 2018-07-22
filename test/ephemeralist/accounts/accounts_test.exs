@@ -43,14 +43,14 @@ defmodule Ephemeralist.AccountsTest do
       expected_username = @valid_attrs.username 
       expected_name =  @valid_attrs.name
 
-      assert %User{name: ^expected_name, username: ^expected_username} = 
+      assert {:ok, %User{name: ^expected_name, username: ^expected_username}} = 
         Accounts.get_user(id)
     end 
 
-    test "get_user/1 should return nil for invalid id" do 
+    test "get_user/1 should return {:error, :user_not_found} for invalid id" do 
       id = 1337
 
-      assert nil == Accounts.get_user(id)
+      assert {:error, :user_not_found} = Accounts.get_user(id)
     end 
 
     test "get_user!/1 should return user struct for valid id" do 
@@ -58,7 +58,7 @@ defmodule Ephemeralist.AccountsTest do
       expected_username = @valid_attrs.username 
       expected_name =  @valid_attrs.name
 
-      assert %User{name: ^expected_name, username: ^expected_username} = 
+      assert {:ok, %User{name: ^expected_name, username: ^expected_username}} = 
         Accounts.get_user!(id)
     end 
 
