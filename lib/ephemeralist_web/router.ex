@@ -7,5 +7,7 @@ defmodule EphemeralistWeb.Router do
 
   scope "/api", EphemeralistWeb do
     pipe_through :api
+
+    resources "/users", UserController, except: [:new, :edit]
   end
 end
