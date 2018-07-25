@@ -17,3 +17,5 @@ config :ephemeralist, Ephemeralist.Repo,
   database: "ephemeralist_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :bcrypt_elixir, :log_rounds, 4
