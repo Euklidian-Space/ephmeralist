@@ -22,6 +22,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:user_id]
 
+config :ephemeralist, Ephemeralist.Guardian,
+  issuer: "ephemeralist",
+  secret_key: "g+VBqRuYSIaICaRIWrCKt0+6MxIeek0q6z1KFi/cRIOvt9Tr7eFastAfOBpUHf4q"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
