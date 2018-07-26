@@ -24,4 +24,10 @@ defmodule Ephemeralist.Accounts do
   def get_user!(id) do 
     {:ok, Repo.get!(User, id)}
   end 
+
+  def register_user(attrs \\ %{}) do 
+    %User{}
+    |> User.registration_changeset(attrs)
+    |> Repo.insert
+  end 
 end 

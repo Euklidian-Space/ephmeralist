@@ -1,7 +1,14 @@
 defmodule Ephemeralist.UserControllerTest do 
   use EphemeralistWeb.ConnCase
   alias Ephemeralist.Accounts
-  @create_attrs %{name: "some name", username: "some_username"}
+  @create_attrs %{
+    name: "some name", 
+    username: "some_username",
+    credential: %{
+      email: "some_email@example.com",
+      password: "Password1234"
+    }
+  }
   @invalid_user_attrs %{name: nil, username: nil}
 
   test "index/2 responds with all users", %{conn: conn} do 
@@ -60,7 +67,7 @@ defmodule Ephemeralist.UserControllerTest do
   end 
 
   describe "create/2" do 
-    test "should respond with user info if creation was successful",
+    test "should respond with user info and credentials if creation was successful",
     %{conn: conn}
     do 
       response = 
@@ -71,7 +78,7 @@ defmodule Ephemeralist.UserControllerTest do
       expected = %{
         "data" => %{
           "name" => @create_attrs.name, 
-          "username" => @create_attrs.username 
+          "username" => @create_attrs.username
         }
       }
 
@@ -89,7 +96,8 @@ defmodule Ephemeralist.UserControllerTest do
       expected = %{
         "errors" => %{
           "name" => ["can't be blank"],
-          "username" => ["can't be blank"]
+          "username" => ["can't be blank"],
+          "credential" => ["can't be blank"]
         }
       }
 

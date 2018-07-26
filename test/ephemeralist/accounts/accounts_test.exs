@@ -1,10 +1,18 @@
 defmodule Ephemeralist.AccountsTest do 
   use Ephemeralist.DataCase
   alias Ephemeralist.Accounts 
-  alias Ephemeralist.Accounts.User
+  alias Ephemeralist.Accounts.{User, Credential}
 
   describe "users" do 
     @valid_attrs %{name: "some name", username: "some_name"}
+    @valid_user_credentials %{
+      name: "some name", 
+      username: "some_username",
+      credential: %{
+        email: "some_email@example.com",
+        password: "Password1234"
+      }
+    }
     @invalid_attrs %{name: nil, username: ""}
 
     def user_fixture(attrs \\ %{}) do 
@@ -66,6 +74,15 @@ defmodule Ephemeralist.AccountsTest do
       id = 1337
 
       assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(id) end 
+    end 
+
+    test "register_user/1 should return user struct with credentials" do 
+      assert {:ok, %User{credential: cred}} = 
+        Accounts.register_user(@valid_user_credentials)
+
+      expected_email = @valid_user_credentials.credential.email
+
+      assert %Credential{email: ^expected_email} = cred
     end 
   end 
 end 

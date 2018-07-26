@@ -16,7 +16,7 @@ defmodule EphemeralistWeb.UserController do
   end 
 
   def create(conn, %{"name" => _, "username" => _} = params) do 
-    with {:ok, user} <- Accounts.create_user(params) do 
+    with {:ok, user} <- Accounts.register_user(params) do 
       render(conn, "show.json", user: user)
     end 
   end 
