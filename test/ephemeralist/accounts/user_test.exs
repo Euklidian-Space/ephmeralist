@@ -1,6 +1,7 @@
 defmodule Ephemeralist.Accounts.UserTest do 
   use Ephemeralist.DataCase
   alias Ephemeralist.Accounts.{User, Credential}
+  alias Ephemeralist.Repo
 
   @valid_attrs %{
     name: "some name",
@@ -28,6 +29,20 @@ defmodule Ephemeralist.Accounts.UserTest do
       attrs = Map.put(@valid_attrs, :username, "abc")
       assert %Ecto.Changeset{valid?: false} =
         User.changeset(%User{}, attrs)
+    end 
+
+    test "username should be unique" do 
+      %User{}
+      |> User.changeset(@valid_attrs)
+      |> Repo.insert
+
+      assert {:error, changeset} = 
+        User.changeset(%User{}, @valid_attrs)
+        |> Repo.insert
+
+      expected = %{username: ["has already been taken"]}
+
+      assert errors_on(changeset) == expected
     end 
   end 
 

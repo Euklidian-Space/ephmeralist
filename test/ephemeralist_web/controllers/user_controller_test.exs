@@ -1,6 +1,7 @@
 defmodule Ephemeralist.UserControllerTest do 
   use EphemeralistWeb.ConnCase
-  alias Ephemeralist.Accounts
+  alias Ephemeralist.{Accounts, Repo, Guardian}
+  alias Accounts.User
   @create_attrs %{
     name: "some name", 
     username: "some_username",
@@ -75,14 +76,12 @@ defmodule Ephemeralist.UserControllerTest do
         |> post(user_path(conn, :create, @create_attrs))
         |> json_response(200)
 
-      expected = %{
-        "data" => %{
-          "name" => @create_attrs.name, 
-          "username" => @create_attrs.username
-        }
-      }
+      %User{id: expected} = Repo.get_by(User, username: @create_attrs.username)
 
-      assert response == expected
+      {:ok, %User{id: received}, _} = 
+        Guardian.resource_from_token(response["token"])
+
+      assert received == expected
     end 
 
     test "responds with error message for invalid user info", 

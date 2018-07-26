@@ -1,6 +1,6 @@
 defmodule EphemeralistWeb.UserController do 
   use EphemeralistWeb, :controller
-  alias Ephemeralist.Accounts
+  alias Ephemeralist.{Accounts, Guardian}
 
   action_fallback EphemeralistWeb.FallbackController
 
@@ -16,8 +16,10 @@ defmodule EphemeralistWeb.UserController do
   end 
 
   def create(conn, %{"name" => _, "username" => _} = params) do 
-    with {:ok, user} <- Accounts.register_user(params) do 
-      render(conn, "show.json", user: user)
+    with {:ok, user} <- Accounts.register_user(params),
+         {:ok, token, _} <- Guardian.encode_and_sign(user)
+    do 
+      render(conn, "userToken.json", token: token)
     end 
   end 
 end 

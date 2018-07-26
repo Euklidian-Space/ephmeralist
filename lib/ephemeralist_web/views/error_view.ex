@@ -3,9 +3,10 @@ defmodule EphemeralistWeb.ErrorView do
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
-  # def render("500.json", _assigns) do
-  #   %{errors: %{detail: "Internal Server Error"}}
-  # end
+
+  def render("500.json", _assigns) do
+    %{errors: %{detail: "Internal Server Error"}}
+  end
 
   def render("404.json", %{error_msg: msg}) do 
     %{errors: %{detail: msg}}

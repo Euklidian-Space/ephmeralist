@@ -15,6 +15,7 @@ defmodule Ephemeralist.Accounts.User do
     user 
     |> cast(attrs, [:name, :username])
     |> validate_required([:name, :username])
+    |> unique_constraint(:username) 
     |> validate_length(:username, min: 4, max: 20)
   end 
 
