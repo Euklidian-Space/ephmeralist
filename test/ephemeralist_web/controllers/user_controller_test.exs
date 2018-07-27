@@ -76,12 +76,21 @@ defmodule Ephemeralist.UserControllerTest do
         |> post(user_path(conn, :create, @create_attrs))
         |> json_response(200)
 
-      %User{id: expected} = Repo.get_by(User, username: @create_attrs.username)
+      %User{id: expected_id} = 
+        Repo.get_by(User, username: @create_attrs.username)
 
-      {:ok, %User{id: received}, _} = 
+      expected_type = "refresh"
+      expected_lifespan = "4 weeks"
+
+      {:ok, 
+        %User{id: received_id}, 
+        %{"typ" => received_type, "lifespan" => received_lifespan}
+      } = 
         Guardian.resource_from_token(response["token"])
 
-      assert received == expected
+      assert received_lifespan == expected_lifespan 
+      assert received_type == expected_type
+      assert received_id == expected_id
     end 
 
     test "responds with error message for invalid user info", 
