@@ -14,7 +14,14 @@ defmodule EphemeralistWeb.FallbackController do
     |> render(EphemeralistWeb.ErrorView, :"404")
   end 
 
-  def call(conn, _) do 
+  def call(conn, {:error, :unauthorized}) do 
+    conn 
+    |> put_status(400)
+    |> assign(:error_msg, "invalid email or password")
+    |> render(EphemeralistWeb.ErrorView, :"400")
+  end 
+
+  def call(conn, err) do 
     conn 
     |> put_status(500)
     |> render(EphemeralistWeb.ErrorView, :"500")

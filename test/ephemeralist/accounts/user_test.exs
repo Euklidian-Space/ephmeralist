@@ -1,6 +1,6 @@
 defmodule Ephemeralist.Accounts.UserTest do 
   use Ephemeralist.DataCase
-  alias Ephemeralist.Accounts.{User, Credential}
+  alias Ephemeralist.Accounts.User
   alias Ephemeralist.Repo
 
   @valid_attrs %{

@@ -1,7 +1,6 @@
 defmodule EphemeralistWeb.UserController do 
   use EphemeralistWeb, :controller
   alias Ephemeralist.{Accounts, Guardian}
-  @token_lifespan "4 weeks"
 
   action_fallback EphemeralistWeb.FallbackController
 
@@ -17,18 +16,16 @@ defmodule EphemeralistWeb.UserController do
   end 
 
   def create(conn, %{"name" => _, "username" => _} = params) do 
-    with {:ok, user} <- Accounts.register_user(params),
-         {:ok, token, _} <- registration_token(user)
-    do 
+    with {:ok, _, token} <- Accounts.register_user(params) do 
       render(conn, "userToken.json", token: token)
     end 
   end 
 
-  defp registration_token(user) do 
-    Guardian.encode_and_sign(
-      user, %{"lifespan" => @token_lifespan}, 
-      token_type: "refresh", 
-      ttl: {4, :weeks}
-    )
+  def sign_in(conn, %{"email" => email, "password" => password}) do 
+    with {:ok, user, token} <- Accounts.token_sign_in(email, password) do 
+      data = %{token: token, email: user.credential.email, username: user.username}
+      render(conn, "user_and_token.json", data)
+    end 
   end 
+
 end 

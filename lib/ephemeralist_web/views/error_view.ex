@@ -12,6 +12,10 @@ defmodule EphemeralistWeb.ErrorView do
     %{errors: %{detail: msg}}
   end 
 
+  def render("400.json", %{error_msg: msg}) do 
+    %{errors: %{detail: msg}}
+  end 
+
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.json" becomes
   # "Not Found".

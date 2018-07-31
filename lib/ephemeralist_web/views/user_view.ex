@@ -14,5 +14,15 @@ defmodule EphemeralistWeb.UserView do
   end 
 
   def render("userToken.json", %{token: token}), do: %{token: token}
+
+  def render(
+    "user_and_token.json", 
+    %{token: token, email: email, username: uname}
+    ) 
+  do 
+    %{data: 
+      %{token: token, email: email, username: uname}
+    }
+  end 
   
 end 
